@@ -34,6 +34,23 @@ const Customizer: React.FC = () => {
         return <AIPicker />;
     }
   };
+
+  const handleDecals = (type, result) => {
+    const decalType = DecalTypes[type];
+
+    state[decalType.stateProperty] = result;
+
+    if (!activeFilterTab[decalType.filterTab]) {
+      handleActiveFilterTab(decalType.filterTab);
+    }
+  };
+
+  const readFile = (type) => {
+    reader(file).then((result) => {
+      handleDecals(type, result);
+      setActiveEditorTab("");
+    });
+  };
   return (
     <AnimatePresence>
       {!snap.intro && (
@@ -49,7 +66,11 @@ const Customizer: React.FC = () => {
                   <Tab
                     key={tab.name}
                     tab={tab}
-                    handleClick={() => setActiveEditorTab(tab.name)}
+                    handleClick={() => {
+                      activeEditorTab === tab.name
+                        ? setActiveEditorTab("")
+                        : setActiveEditorTab(tab.name);
+                    }}
                   />
                 ))}
 
